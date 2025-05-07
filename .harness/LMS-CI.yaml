@@ -1,0 +1,22 @@
+pipeline:
+  name: LMS-CI
+  identifier: LMSCI
+  projectIdentifier: DemoTx
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: start-mail
+        identifier: startmail
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  name: email
+                  identifier: email
+                  template:
+                    templateRef: Email
+                    versionLabel: v1.0
+        tags: {}
