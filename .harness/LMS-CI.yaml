@@ -20,3 +20,36 @@ pipeline:
                     templateRef: Email
                     versionLabel: v1.0
         tags: {}
+    - stage:
+        name: Build-Stage
+        identifier: BuildStage
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: FrontEnd
+                  identifier: FrontEnd
+                  spec:
+                    shell: Sh
+                    command: ls
+        delegateSelectors:
+          - gcp-delegate
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.Github_OAuth_1702454216196
+        repoName: ipreetgs/Learning-Management-System-Fullstack
+        build: <+input>
