@@ -30,21 +30,25 @@ pipeline:
           caching:
             enabled: true
             override: true
-          platform:
-            os: Linux
-            arch: Amd64
-          runtime:
-            type: Docker
-            spec: {}
           execution:
             steps:
               - step:
                   type: Run
-                  name: FrontEnd
-                  identifier: FrontEnd
+                  name: Run_1
+                  identifier: Run_1
                   spec:
+                    connectorRef: account.harnessImage
+                    image: ubuntu
                     shell: Sh
                     command: ls
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: K8
+              namespace: harness-delegate-ng
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
         delegateSelectors:
           - gcp-delegate
   properties:
