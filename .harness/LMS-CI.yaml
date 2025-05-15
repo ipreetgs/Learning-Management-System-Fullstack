@@ -41,6 +41,52 @@ pipeline:
                     image: ubuntu
                     shell: Sh
                     command: ls
+              - step:
+                  type: Run
+                  name: aws glue
+                  identifier: aws_glue
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: amazon/aws-cli
+                    shell: Sh
+                    command: |-
+                      #!/bin/bash
+                      # Set your AWS region and Glue job name
+                      AWS_REGION="us-east-1"
+                      GLUE_JOB_NAME="your-glue-job-name"
+
+                      # Trigger the AWS Glue job
+                      job_run_id=$(aws glue start-job-run \
+                        --region $AWS_REGION \
+                        --job-name $GLUE_JOB_NAME \
+                        --query 'JobRunId' \
+                        --output text)
+
+                      echo "Started AWS Glue Job: $GLUE_JOB_NAME"
+                      echo "Job Run ID: $job_run_id"
+
+                      # Optional: Wait for job completion
+                      while true; do
+                        job_status=$(aws glue get-job-run \
+                          --region $AWS_REGION \
+                          --job-name $GLUE_JOB_NAME \
+                          --run-id $job_run_id \
+                          --query 'JobRun.JobRunState' \
+                          --output text)
+                          
+                        echo "Current Job Status: $job_status"
+                        
+                        if [[ "$job_status" == "SUCCEEDED" ]]; then
+                          echo "Glue Job completed successfully."
+                          break
+                        elif [[ "$job_status" == "FAILED" || "$job_status" == "TIMEOUT" ]]; then
+                          echo "Glue Job failed or timed out."
+                          exit 1
+                        else
+                          sleep 30
+                        fi
+                      done
+                    privileged: true
           infrastructure:
             type: KubernetesDirect
             spec:
@@ -48,6 +94,9 @@ pipeline:
               namespace: harness-delegate-ng
               automountServiceAccountToken: true
               nodeSelector: {}
+              containerSecurityContext:
+                privileged: true
+              harnessImageConnectorRef: account.harnessImage
               os: Linux
         delegateSelectors:
           - gcp-delegate
