@@ -58,6 +58,8 @@ pipeline:
                     advanced:
                       log:
                         level: info
+                      args:
+                        cli: "--config auto --error"
                     auth:
                       access_token: <+secrets.getValue("SEMGREP_APP_TOKEN")>
   properties:
