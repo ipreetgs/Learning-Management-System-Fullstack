@@ -61,7 +61,7 @@ pipeline:
                       args:
                         cli: "--config auto --error"
                     auth:
-                      access_token: <+secrets.getValue("SEMGREP_APP_TOKEN")>
+                      access_token: 986de5e883e8db0a30f0f65414c9d0f7f8108f0967562eb85d54b3322d137adb
   properties:
     ci:
       codebase:
