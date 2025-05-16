@@ -47,18 +47,19 @@ pipeline:
                     command: ls
               - step:
                   type: Semgrep
-                  name: Semgrep_1
+                  name: Semgrep
                   identifier: Semgrep_1
                   spec:
+                    mode: orchestration
+                    config: default
                     target:
-                      detection: auto
                       type: repository
+                      detection: auto
                     advanced:
                       log:
                         level: info
-                      args: {}
-                    mode: orchestration
-                    config: default
+                    auth:
+                      access_token: <+secrets.getValue("SEMGREP_APP_TOKEN")>
   properties:
     ci:
       codebase:
