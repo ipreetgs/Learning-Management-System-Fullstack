@@ -61,7 +61,7 @@ pipeline:
                       args:
                         cli: "--config auto --error"
                     auth:
-                      access_token: 986de5e883e8db0a30f0f65414c9d0f7f8108f0967562eb85d54b3322d137adb
+                      access_token: 0c72b1d1d91ccdfb5244c7e783ce936fa67c94325bca2cc9ddde6a19f6194d9b
               - parallel:
                   - step:
                       type: Owasp
