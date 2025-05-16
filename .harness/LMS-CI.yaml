@@ -87,19 +87,12 @@ pipeline:
                         fi
                       done
                     privileged: true
-          infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: K8
-              namespace: harness-delegate-ng
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              containerSecurityContext:
-                privileged: true
-              harnessImageConnectorRef: account.harnessImage
-              os: Linux
-        delegateSelectors:
-          - gcp-delegate
+          platform:
+            os: Linux
+            arch: Arm64
+          runtime:
+            type: Cloud
+            spec: {}
   properties:
     ci:
       codebase:
