@@ -58,8 +58,9 @@ pipeline:
                     advanced:
                       log:
                         level: info
+                      fail_on_severity: high
                       args:
-                        cli: "--config auto --error"
+                        cli: "--config auto --json --upload --exclude-dir node_modules"
                     auth:
                       access_token: 0c72b1d1d91ccdfb5244c7e783ce936fa67c94325bca2cc9ddde6a19f6194d9b
               - parallel:
