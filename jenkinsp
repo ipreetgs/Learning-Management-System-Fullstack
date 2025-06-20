@@ -1,0 +1,64 @@
+pipeline {
+    agent none
+    stages {
+        stage('Run Tests in Parallel') {
+            parallel {
+                stage('Test Suite on Node 1') {
+                    agent { label 'Windows_BuildInNode' }
+                    stages {
+                        stage('Checkout on Node 1') {
+                            steps {
+                                cleanWs()
+                                git branch: 'feature/TESTCIL-261', 
+                                    credentialsId: 'Test_New',
+                                    url: 'http://Shubham_Choudhary@bitbucket.org/sagicorgroup/foresight.git'
+                            }
+                        }
+                        stage('Execute Plan 1') {
+                            steps {
+                                script {
+                                    def varOcg = "${env.WORKSPACE}\\Foresight_RegressionSuite\\Foresight_Web.pjs"
+                                    testcompletetest credentialsId: "179c9318-943f-4599-9f74-290a50e05c51",
+                                        executorType: 'TC',
+                                        launchType: 'lcTags',
+                                        project: 'Foresight_Regression',
+                                        tags: '@ExecutionPlan1',
+                                        suite: varOcg,
+                                        useTCService: true
+                                }
+                            }
+                        }
+                    }
+                }
+
+                stage('Test Suite on Node 2') {
+                    agent { label 'Windows_Node2' }
+                    stages {
+                        stage('Checkout on Node 2') {
+                            steps {
+                                cleanWs()
+                                git branch: 'feature/TESTCIL-261', 
+                                    credentialsId: 'Test_New',
+                                    url: 'http://Shubham_Choudhary@bitbucket.org/sagicorgroup/foresight.git'
+                            }
+                        }
+                        stage('Execute Plan 2') {
+                            steps {
+                                script {
+                                    def varOcg = "${env.WORKSPACE}\\Foresight_RegressionSuite\\Foresight_Web.pjs"
+                                    testcompletetest credentialsId: "179c9318-943f-4599-9f74-290a50e05c51",
+                                        executorType: 'TE',
+                                        launchType: 'lcTags',
+                                        project: 'Foresight_Regression',
+                                        tags: '@ExecutionPlan2',
+                                        suite: varOcg,
+                                        useTCService: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
